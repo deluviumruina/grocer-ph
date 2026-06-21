@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
+import 'package:grocer_ph/common/widgets/images/app_icons.dart';
 import 'package:grocer_ph/common/widgets/texts/product_price_text.dart';
 import 'package:grocer_ph/features/price_comparison/models/price_report_model.dart';
 import 'package:grocer_ph/features/price_comparison/screens/widgets/confirmation_button.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:grocer_ph/utils/formatters/formatters.dart';
+import 'package:grocer_ph/utils/helpers/helper_functions.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PriceReportCardWide extends StatelessWidget {
@@ -17,6 +19,7 @@ class PriceReportCardWide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = HelperFunctions.isDarkMode(context);
 
     return InkWell(
       onTap: onTap,
@@ -47,7 +50,7 @@ class PriceReportCardWide extends StatelessWidget {
                       GFormatter.formatDate(priceReport.date), 
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.black.withValues(alpha: 0.8),
+                        color: dark ? Colors.white : Colors.black.withValues(alpha: 0.8),
                       ),
                     ),
                   ],
@@ -59,7 +62,7 @@ class PriceReportCardWide extends StatelessWidget {
             /// -- Store Name
             Row(
               children: [
-                Icon(Iconsax.shop, color: Colors.black.withValues(alpha: 0.55)),
+                AppIcons(icon: Iconsax.shop),
                 const SizedBox(width: Sizes.sm),
                 Text(
                   priceReport.storeName, 
@@ -73,7 +76,7 @@ class PriceReportCardWide extends StatelessWidget {
             /// -- Store Location
             Row(
               children: [
-                Icon(Iconsax.map, color: Colors.black.withValues(alpha: 0.55)),
+                AppIcons(icon: Iconsax.map),
                 const SizedBox(width: Sizes.sm),
                 Text(
                   priceReport.storeLocation,
@@ -94,7 +97,7 @@ class PriceReportCardWide extends StatelessWidget {
                 /// -- Username
                 Row(
                   children: [
-                    Icon(Iconsax.user, color: Colors.black.withValues(alpha: 0.55)),
+                    AppIcons(icon: Iconsax.user),
                     SizedBox(width: Sizes.sm),
                     Text(priceReport.userName, style: Theme.of(context).textTheme.titleSmall),
                   ],

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/search_container.dart';
 import 'package:grocer_ph/data/repositories/price_report_repository.dart';
 import 'package:grocer_ph/features/price_comparison/controllers/price_report_controller.dart';

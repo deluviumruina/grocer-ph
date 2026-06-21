@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/large_header_container.dart';
 import 'package:grocer_ph/common/widgets/texts/clickable_section_heading.dart';
 import 'package:grocer_ph/features/profiles/controllers/user_controller.dart';

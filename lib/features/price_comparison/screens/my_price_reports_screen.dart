@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/data/repositories/price_report_repository.dart';
 import 'package:grocer_ph/features/price_comparison/models/price_report_model.dart';
 import 'package:grocer_ph/features/price_comparison/screens/price_reports_detail_screen.dart';
@@ -24,7 +24,7 @@ class _MyPriceReportsScreenState extends State<MyPriceReportsScreen> {
   bool _isLoadingMore = false;
   bool _hasMoreData = true;
   DocumentSnapshot? _lastDocument;
-  
+
   @override
   void initState() {
     super.initState();
@@ -35,11 +35,16 @@ class _MyPriceReportsScreenState extends State<MyPriceReportsScreen> {
   Future<void> getFirst() async {
     setState(() => _isLoadingFirst = true);
 
-    QuerySnapshot query = await PriceReportRepository.instance.getFirstCurrentUserPriceReports(limit);
+    QuerySnapshot query = await PriceReportRepository.instance
+        .getFirstCurrentUserPriceReports(limit);
 
-    if(query.docs.isNotEmpty) {
+    if (query.docs.isNotEmpty) {
       _lastDocument = query.docs.last;
-      priceReports.addAll(query.docs.map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot)).toList());
+      priceReports.addAll(
+        query.docs
+            .map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot))
+            .toList(),
+      );
 
       if (query.docs.length <= limit - 1) {
         _hasMoreData = false;
@@ -56,11 +61,16 @@ class _MyPriceReportsScreenState extends State<MyPriceReportsScreen> {
 
     setState(() => _isLoadingMore = true);
 
-    QuerySnapshot query = await PriceReportRepository.instance.getMoreCurrentUserPriceReports(_lastDocument!, limit);
-    
+    QuerySnapshot query = await PriceReportRepository.instance
+        .getMoreCurrentUserPriceReports(_lastDocument!, limit);
+
     if (query.docs.isNotEmpty) {
       _lastDocument = query.docs.last;
-      priceReports.addAll(query.docs.map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot)).toList());
+      priceReports.addAll(
+        query.docs
+            .map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot))
+            .toList(),
+      );
     } else {
       _hasMoreData = false;
     }
@@ -69,7 +79,8 @@ class _MyPriceReportsScreenState extends State<MyPriceReportsScreen> {
   }
 
   void _scrollListener() {
-    if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       getMore();
     }
   }
@@ -87,38 +98,43 @@ class _MyPriceReportsScreenState extends State<MyPriceReportsScreen> {
 
       body: Padding(
         padding: EdgeInsets.all(Sizes.defaultSpace),
-        child: ListView.separated(
-          controller: scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: priceReports.length + (_hasMoreData ? 1 : 0),
-          itemBuilder: (_, index) {
-            if (_isLoadingFirst) {
-              return MyPriceReportsLoader(itemCount: limit);
-            } else if (index == priceReports.length) {
-              return const PriceReportCardNarrowShimmer();
-            }
+        child: _isLoadingFirst
+          ? MyPriceReportsLoader(itemCount: limit)
+          : priceReports.isEmpty
+            ? Text('No data found. Add price reports through the product screen.', textAlign: TextAlign.center)
+            : ListView.separated(
+                controller: scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: priceReports.length + (_hasMoreData ? 1 : 0),
+                itemBuilder: (_, index) {
+                  if (index == priceReports.length) {
+                    return const PriceReportCardNarrowShimmer();
+                  }
 
-            return NarrowPriceReportCard(
-              priceReport: priceReports[index],
-              onTap: () => Get.to(() => PriceReportsDetailScreen(selectedPriceReport: priceReports[index]))
-            );
-          },
-          separatorBuilder: (_, index) =>
-            Column(children: [
-              const SizedBox(height: Sizes.spaceBtwItems / 2),
-              Divider(),
-              const SizedBox(height: Sizes.spaceBtwItems / 2)
-            ],),
-        )
+                  return PriceReportCardNarrow(
+                    priceReport: priceReports[index],
+                    onTap: () => Get.to(
+                      () => PriceReportsDetailScreen(
+                        selectedPriceReport: priceReports[index],
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (_, index) => Column(
+                  children: [
+                    const SizedBox(height: Sizes.spaceBtwItems / 2),
+                    Divider(),
+                    const SizedBox(height: Sizes.spaceBtwItems / 2),
+                  ],
+                ),
+              ),
       ),
     );
   }
 }
 
 class MyPriceReportsLoader extends StatelessWidget {
-  const MyPriceReportsLoader({
-    super.key, required this.itemCount,
-  });
+  const MyPriceReportsLoader({super.key, required this.itemCount});
 
   final int itemCount;
 
@@ -130,11 +146,13 @@ class MyPriceReportsLoader extends StatelessWidget {
       itemBuilder: (_, index) {
         return const PriceReportCardNarrowShimmer();
       },
-      separatorBuilder: (_, index) => Column(children: [
-        const SizedBox(height: Sizes.spaceBtwItems / 2),
-        Divider(),
-        const SizedBox(height: Sizes.spaceBtwItems /2)
-      ])
+      separatorBuilder: (_, index) => Column(
+        children: [
+          const SizedBox(height: Sizes.spaceBtwItems / 2),
+          Divider(),
+          const SizedBox(height: Sizes.spaceBtwItems / 2),
+        ],
+      ),
     );
   }
 }

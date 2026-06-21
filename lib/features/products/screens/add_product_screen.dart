@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
 import 'package:grocer_ph/features/products/controllers/product_category_controller.dart';
 import 'package:grocer_ph/features/products/controllers/product_controller.dart';
@@ -25,6 +25,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     final controller = ProductController.instance;
     final categoryController = ProductCategoryController.instance;
+    bool isLoading = false;
 
     return Scaffold(
       appBar: DefaultAppBar(showBackArrow: true, title: Text('Add a Product')),
@@ -117,6 +118,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: RoundedContainer(
                     showBorder: true,
                     borderColor: AppColors.darkGrey,
+                    backgroundColor: Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14.0,
@@ -133,11 +135,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
                                   final image = await ImagePicker().pickImage(
                                     source: ImageSource.gallery,
                                   );
+
                                   if (image != null) {
-                                    controller.image = File(image.path);
+                                    setState(() {
+                                      isLoading = false;
+                                      controller.image = File(image.path);
+                                    });
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -158,9 +168,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               height: 150,
                               width: 300,
                               child: Center(
-                                child: controller.image == null
-                                    ? Text('No image selected')
-                                    : Image.file(controller.image!),
+                                child: isLoading
+                                ? const CircularProgressIndicator()
+                                : controller.image == null
+                                  ? Text('No image selected')
+                                  : Image.file(controller.image!),
                               ),
                             ),
                           ),
