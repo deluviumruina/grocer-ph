@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/texts/clickable_section_heading.dart';
 import 'package:grocer_ph/features/price_comparison/controllers/price_report_controller.dart';
 import 'package:grocer_ph/features/price_comparison/models/price_report_model.dart';
-import 'package:grocer_ph/features/price_comparison/screens/widgets/detail_price_report_card.dart';
+import 'package:grocer_ph/features/price_comparison/screens/widgets/price_report_card_detail.dart';
 import 'package:grocer_ph/features/price_comparison/screens/widgets/price_report_card_wide.dart';
 import 'package:grocer_ph/features/products/screens/product_screen.dart';
 import 'package:grocer_ph/features/stores/screens/store_screen.dart';

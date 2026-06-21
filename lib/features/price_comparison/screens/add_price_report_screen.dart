@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/features/price_comparison/controllers/price_report_controller.dart';
 import 'package:grocer_ph/features/products/models/product_model.dart';
 import 'package:grocer_ph/features/products/screens/widgets/product_card_horizontal.dart';

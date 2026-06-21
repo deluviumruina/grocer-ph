@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/buttons/bottom_navigation_bar_button.dart';
 import 'package:grocer_ph/common/widgets/containers/bottom_navigation_bar.dart';
 import 'package:grocer_ph/common/widgets/shapes/curved_edge_widget.dart';

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
 import 'package:grocer_ph/features/stores/controllers/store_category_controller.dart';
 import 'package:grocer_ph/features/stores/controllers/store_controller.dart';
@@ -25,6 +25,7 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
   Widget build(BuildContext context) {
     final controller = StoreController.instance;
     final categoryController = StoreCategoryController.instance;
+    bool isLoading = false;
 
     return Scaffold(
       appBar: DefaultAppBar(showBackArrow: true, title: Text('Add a Store')),
@@ -61,10 +62,7 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
                       ],
                     );
 
-                    final widget = CloudHelperFunctions.checkMultiRecordState(
-                      snapshot: snapshot,
-                      loader: loader,
-                    );
+                    final widget = CloudHelperFunctions.checkMultiRecordState(snapshot: snapshot, loader: loader);
                     if (widget != null) return widget;
 
                     return DropdownButtonFormField(
@@ -116,6 +114,7 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
                   child: RoundedContainer(
                     showBorder: true,
                     borderColor: AppColors.darkGrey,
+                    backgroundColor: Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14.0,
@@ -132,11 +131,19 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
                                   final image = await ImagePicker().pickImage(
                                     source: ImageSource.gallery,
                                   );
+
                                   if (image != null) {
-                                    controller.image = File(image.path);
+                                    setState(() {
+                                      isLoading = false;
+                                      controller.image = File(image.path);
+                                    });
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -157,7 +164,9 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
                               height: 150,
                               width: 300,
                               child: Center(
-                                child: controller.image == null
+                                child: isLoading
+                                  ? const CircularProgressIndicator()
+                                  : controller.image == null
                                     ? Text('No image selected')
                                     : Image.file(controller.image!),
                               ),

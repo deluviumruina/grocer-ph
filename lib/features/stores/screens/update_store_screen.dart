@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
 import 'package:grocer_ph/features/stores/controllers/store_category_controller.dart';
 import 'package:grocer_ph/features/stores/controllers/store_controller.dart';
@@ -28,6 +28,7 @@ class _UpdateStoreScreenState extends State<UpdateStoreScreen> {
   Widget build(BuildContext context) {
     final controller = StoreController.instance;
     final categoryController = StoreCategoryController.instance;
+    bool isLoading = false;
 
     return Scaffold(
       appBar: DefaultAppBar(showBackArrow: true, title: Text('Update Store')),
@@ -112,6 +113,7 @@ class _UpdateStoreScreenState extends State<UpdateStoreScreen> {
                   child: RoundedContainer(
                     showBorder: true,
                     borderColor: AppColors.darkGrey,
+                    backgroundColor: Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14.0,
@@ -128,11 +130,19 @@ class _UpdateStoreScreenState extends State<UpdateStoreScreen> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
                                   final image = await ImagePicker().pickImage(
                                     source: ImageSource.gallery,
                                   );
+
                                   if (image != null) {
-                                    controller.image = File(image.path);
+                                    setState(() {
+                                      isLoading = false;
+                                      controller.image = File(image.path);
+                                    });
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -153,7 +163,9 @@ class _UpdateStoreScreenState extends State<UpdateStoreScreen> {
                               height: 150,
                               width: 300,
                               child: Center(
-                                child: controller.image == null
+                                child: isLoading
+                                ? const CircularProgressIndicator()
+                                : controller.image == null
                                   ? widget.store.image == null
                                     ? Text('No image selected')
                                     : Image.network(controller.formatImage(widget.store))

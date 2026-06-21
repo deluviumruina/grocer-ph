@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/layouts/grid_layout.dart';
 import 'package:grocer_ph/features/products/controllers/favorites_controller.dart';
 import 'package:grocer_ph/features/products/screens/widgets/product_card_vertical.dart';
@@ -35,7 +35,8 @@ class FavoritesScreen extends StatelessWidget {
                   builder: (context, snapshot) {
             
                     const loader = VerticalCardGridShimmer(itemCount: 6);
-                    final widget = CloudHelperFunctions.checkMultiRecordState(snapshot: snapshot, loader: loader);
+                    const nothingFound = Text('No data found. Track products on this screen by tapping the Favorite (♡) button.', textAlign: TextAlign.center);
+                    final widget = CloudHelperFunctions.checkMultiRecordState(snapshot: snapshot, loader: loader, nothingFound: nothingFound);
                     if (widget != null) return widget;
             
                     final products = snapshot.data!;

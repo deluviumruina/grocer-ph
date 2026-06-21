@@ -11,8 +11,8 @@ import 'package:grocer_ph/utils/formatters/formatters.dart';
 import 'package:grocer_ph/utils/helpers/helper_functions.dart';
 import 'package:iconsax/iconsax.dart';
 
-class NarrowPriceReportCard extends StatelessWidget {
-  const NarrowPriceReportCard({super.key, required this.priceReport, this.onTap});
+class PriceReportCardNarrow extends StatelessWidget {
+  const PriceReportCardNarrow({super.key, required this.priceReport, this.onTap});
 
   final PriceReportModel priceReport;
   final void Function()? onTap;

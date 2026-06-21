@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grocer_ph/common/widgets/app_bar.dart';
+import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/buttons/floating_action_button.dart';
 import 'package:grocer_ph/common/widgets/containers/large_header_container.dart';
 import 'package:grocer_ph/common/widgets/layouts/grid_layout.dart';

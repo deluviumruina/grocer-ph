@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
+import 'package:grocer_ph/common/widgets/images/app_icons.dart';
 import 'package:grocer_ph/common/widgets/texts/product_price_text.dart';
 import 'package:grocer_ph/features/price_comparison/models/price_report_model.dart';
 import 'package:grocer_ph/features/price_comparison/screens/widgets/confirmation_button.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:grocer_ph/utils/formatters/formatters.dart';
+import 'package:grocer_ph/utils/helpers/helper_functions.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PriceReportCardDetail extends StatelessWidget {
@@ -14,9 +16,12 @@ class PriceReportCardDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = HelperFunctions.isDarkMode(context);
+
     return RoundedContainer(
       showBorder: true,
       borderColor: Colors.grey,
+      backgroundColor: Colors.transparent,
       padding: EdgeInsets.all(14),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,7 +47,7 @@ class PriceReportCardDetail extends StatelessWidget {
                         GFormatter.formatShortDate(priceReport.date),
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.black.withValues(alpha: 0.8),
+                          color: dark ? Colors.white : Colors.black.withValues(alpha: 0.8),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -53,18 +58,19 @@ class PriceReportCardDetail extends StatelessWidget {
               ),
               SizedBox(height: Sizes.sm / 2),
 
-              /// -- Date and UserName
+              /// -- UserName
               Row(
                 children: [
-                  Icon(
-                    Iconsax.user,
-                    size: 14,
-                    color: Colors.black.withValues(alpha: 0.55),
+                  AppIcons(
+                    icon: Iconsax.user,
+                    size: 14
                   ),
                   SizedBox(width: Sizes.sm / 2),
                   Text(
                     priceReport.userName,
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(
+                      fontSize: 14
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
