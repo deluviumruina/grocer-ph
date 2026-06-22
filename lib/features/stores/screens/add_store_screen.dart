@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
 import 'package:grocer_ph/features/stores/controllers/store_category_controller.dart';
@@ -9,6 +10,7 @@ import 'package:grocer_ph/utils/constants/colors.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:grocer_ph/utils/helpers/cloud_helper_functions.dart';
 import 'package:grocer_ph/utils/loaders/shimmer.dart';
+import 'package:grocer_ph/utils/loaders/shimmer_sizes.dart';
 import 'package:grocer_ph/utils/validators/validation.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,7 +30,19 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
     bool isLoading = false;
 
     return Scaffold(
-      appBar: DefaultAppBar(showBackArrow: true, title: Text('Add a Store')),
+      appBar: DefaultAppBar(
+        showBackArrow: true, 
+        onBackArrowPressed: () {
+          setState(() {
+            controller.name = '';
+            controller.location = '';
+            controller.image = null;
+
+            Get.back();
+          });
+        },
+        title: Text('Add a Store')
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(Sizes.defaultSpace),
@@ -165,7 +179,7 @@ class _AddStoreScreenState extends State<AddStoreScreen> {
                               width: 300,
                               child: Center(
                                 child: isLoading
-                                  ? const CircularProgressIndicator()
+                                  ? const FormImageShimmer()
                                   : controller.image == null
                                     ? Text('No image selected')
                                     : Image.file(controller.image!),

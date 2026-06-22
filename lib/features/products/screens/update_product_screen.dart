@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
 import 'package:grocer_ph/features/products/controllers/product_category_controller.dart';
@@ -10,6 +11,7 @@ import 'package:grocer_ph/utils/constants/colors.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:grocer_ph/utils/helpers/cloud_helper_functions.dart';
 import 'package:grocer_ph/utils/loaders/shimmer.dart';
+import 'package:grocer_ph/utils/loaders/shimmer_sizes.dart';
 import 'package:grocer_ph/utils/validators/validation.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,14 +26,25 @@ class UpdateProductScreen extends StatefulWidget {
 }
 
 class _UpdateProductScreenState extends State<UpdateProductScreen> {
+  final controller = ProductController.instance;
+  final categoryController = ProductCategoryController.instance;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    final controller = ProductController.instance;
-    final categoryController = ProductCategoryController.instance;
-    bool isLoading = false;
-
     return Scaffold(
-      appBar: DefaultAppBar(showBackArrow: true, title: Text('Update Product')),
+      appBar: DefaultAppBar(
+        showBackArrow: true, 
+        onBackArrowPressed: () {
+          setState(() {
+            controller.name = '';
+            controller.description = '';
+            controller.image = null;
+
+            Get.back();
+          });
+        }, 
+        title: Text('Update Product')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(Sizes.defaultSpace),
@@ -165,12 +178,20 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                               width: 300,
                               child: Center(
                                 child: isLoading
-                                ? const CircularProgressIndicator()
-                                : controller.image == null
-                                  ? widget.product.image == null 
-                                    ? Text('No image selected')
-                                    : Image.network(widget.product.image!)
-                                  : Image.file(controller.image!),
+                                  ? const FormImageShimmer()
+                                  : controller.image == null
+                                    ? widget.product.image == null 
+                                      ? Text('No image selected')
+                                      : Image.network(
+                                        widget.product.image!,
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return const FormImageShimmer();
+                                        },
+                                      )
+                                    : Image.file(controller.image!),
                               ),
                             ),
                           ),
