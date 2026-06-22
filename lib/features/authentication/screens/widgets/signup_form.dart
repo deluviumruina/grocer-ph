@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grocer_ph/features/authentication/controllers/signup_controller.dart';
+import 'package:grocer_ph/features/authentication/screens/widgets/informed_consent_page.dart';
 import 'package:grocer_ph/utils/constants/colors.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:grocer_ph/utils/helpers/helper_functions.dart';
@@ -84,8 +86,6 @@ class SignupForm extends StatelessWidget {
   }
 }
 
-/// -- TODO: WRITE A STATEMENT OF INFORMED CONSENT.
-
 class DataConsentCheckbox extends StatelessWidget {
   const DataConsentCheckbox({
     super.key,
@@ -116,7 +116,9 @@ class DataConsentCheckbox extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 TextSpan(
-                  text: 'statement of informed consent',
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => Get.to(() => const InformedConsentForm()),
+                  text: 'informed consent form',
                   style: Theme.of(context).textTheme.bodyMedium!
                       .apply(
                         color: dark
@@ -129,7 +131,7 @@ class DataConsentCheckbox extends StatelessWidget {
                       ),
                 ),
                 TextSpan(
-                  text: ' and I authorize the use of the data I submit to this app for its associated study.',
+                  text: ' and I formally consent to participate in this study.',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],

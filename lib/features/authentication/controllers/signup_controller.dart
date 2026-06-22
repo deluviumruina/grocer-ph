@@ -15,7 +15,7 @@ class SignupController extends GetxController {
   final username = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
-  final dataConsent = true.obs;
+  final dataConsent = false.obs;
   GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
   final hidePassword = true.obs;

@@ -36,3 +36,12 @@ class OutlinedButtonShimmer extends StatelessWidget {
     return const ShimmerLoader(width: 150, height: 50, radius: 10);
   }
 }
+
+class FormImageShimmer extends StatelessWidget {
+  const FormImageShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const ShimmerLoader(width: 300, height: 150);
+  }
+}
