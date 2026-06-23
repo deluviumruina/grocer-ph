@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:iconsax/iconsax.dart';
 
-class GProfileRow extends StatelessWidget {
-  const GProfileRow({
+class ProfileRow extends StatelessWidget {
+  const ProfileRow({
     super.key,
     this.icon = Iconsax.copy,
     this.onPressed,

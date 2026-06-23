@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:grocer_ph/data/repositories/user_repository.dart';
 import 'package:grocer_ph/features/authentication/screens/login_screen.dart';
 import 'package:grocer_ph/features/welcoming/onboarding_screen.dart';
 import 'package:grocer_ph/navigation_menu.dart';
@@ -42,10 +43,10 @@ class AuthenticationRepository extends GetxController {
     }
   }
 
-/*   -------------- EMAIL & PASSWORD SIGN IN -------------- */
+/*   -------------- [SIGN IN] -------------- */
 
   /// -- Login
-  Future<UserCredential> loginWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> login(String email, String password) async {
     try {
       return await _auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
@@ -54,21 +55,41 @@ class AuthenticationRepository extends GetxController {
   }
   
   /// -- Register
-  Future<UserCredential> registerWithEmailAndPassword(String email, String password) async {
+  Future<UserCredential> register(String email, String password) async {
     try {
       return await _auth.createUserWithEmailAndPassword(email: email, password: password);
     } catch (e) {
       throw e.toString();
     }
-  } 
+  }
 
-/*   -------------- LOGOUT -------------- */
+  /// -- Re-Authenticate
+  Future<void> reAuthenticate(String email, String password) async {
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+      await _auth.currentUser!.reauthenticateWithCredential(credential);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+/*   -------------- [SIGN OUT] -------------- */
 
   /// -- Logout
   Future<void> logout() async {
     try {
       await FirebaseAuth.instance.signOut();
       Get.offAll(() => const LoginScreen());
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+/*   -------------- [DELETE] -------------- */
+  Future<void> deleteUser() async {
+    try {
+      await UserRepository.instance.removeUserRecord(_auth.currentUser!.uid);
+      await _auth.currentUser?.delete();
     } catch (e) {
       throw e.toString();
     }

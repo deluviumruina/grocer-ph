@@ -4,6 +4,7 @@ import 'package:grocer_ph/common/widgets/containers/large_header_container.dart'
 import 'package:grocer_ph/common/widgets/texts/clickable_section_heading.dart';
 import 'package:grocer_ph/features/profiles/controllers/user_controller.dart';
 import 'package:grocer_ph/features/profiles/screens/widgets/profile_row.dart';
+import 'package:grocer_ph/utils/constants/colors.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -86,18 +87,37 @@ class AccountScreen extends StatelessWidget {
                   const SizedBox(height: Sizes.spaceBtwItems),
 
                   /// -- User ID
-                  GProfileRow(
+                  ProfileRow(
                     title: 'User ID',
                     value: controller.user.value.id,
                     onPressed: () {},
                   ),
 
                   /// -- Email
-                  GProfileRow(
+                  ProfileRow(
                     title: 'Email',
                     value: controller.user.value.email,
                     showIcon: false,
                   ),
+                  const SizedBox(height: Sizes.spaceBtwSections),
+                  const Divider(),
+                  const SizedBox(height: Sizes.spaceBtwSections),
+
+                  /// -- Delete Account Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: controller.deleteUserWarning, 
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.error,
+                        side: const BorderSide(
+                          color: AppColors.borderPrimary
+                        )
+                      ),
+                      child: const Text('Delete Account')
+                    ),
+                  )
+                  
                 ],
               ),
             ),
