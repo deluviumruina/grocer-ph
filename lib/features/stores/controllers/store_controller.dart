@@ -64,17 +64,6 @@ class StoreController extends GetxController {
     }
   }
 
-  /// -- Get Store PRODUCT IDs
-  Future<List<String>> getStoreProductIds(String storeId) async {
-    try {
-      final ids = await _storeRepository.getStoreProductIds(storeId);
-      return ids;
-    } catch (e) {
-      AppSnackBars.errorSnackBar(title: 'Error.', message: e.toString());
-      return [];
-    }
-  }
-
   // # -------------- [POST] -------------- # 
   Future addStore() async {
     try {

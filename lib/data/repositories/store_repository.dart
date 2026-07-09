@@ -49,21 +49,6 @@ class StoreRepository extends GetxController {
       throw e.toString();
     }
   }
-  
-  /// -- Get PRODUCT IDS from price reports
-  Future<List<String>> getStoreProductIds (String storeId) async {
-    try {
-      QuerySnapshot query = await _db
-        .collection('PriceReports')
-        .where('StoreId', isEqualTo: storeId)
-        .orderBy('Date', descending: true)
-        .get();
-      List<String> ids = query.docs.map((doc) => doc['ProductId'] as String).toList();
-      return ids;
-    } catch (e) {
-      throw e.toString();
-    }
-  }
 
   /// -- Get SINGLE store
   Future<StoreModel> getSingleStore(String storeId) async {

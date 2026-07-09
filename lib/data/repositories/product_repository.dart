@@ -136,8 +136,8 @@ class ProductRepository extends GetxController {
   }
 
   /*   -------------- [UPDATE] -------------- */
-  /// -- Update price report total, date updated, price minimum, and price maximum after adding price report
-  Future<void> updateFromPriceReport(String productId) async {
+  /// -- Update price report total, date updated, price minimum, price maximum, and stores after adding price report
+  Future<void> updateFromPriceReport(String productId, String storeId) async {
     try {
       QuerySnapshot querySnapshot = await _db
           .collection('PriceReports')
@@ -160,6 +160,7 @@ class ProductRepository extends GetxController {
           'PriceReports': FieldValue.increment(1),
           'PriceMinimum': priceMinimum,
           'PriceMaximum': priceMaximum,
+          'Stores': FieldValue.arrayUnion([storeId])
         }, SetOptions(merge: true));
       }
     } catch (e) {

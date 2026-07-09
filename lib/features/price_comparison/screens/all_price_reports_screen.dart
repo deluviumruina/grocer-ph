@@ -44,11 +44,16 @@ class _AllPriceReportsScreenState extends State<AllPriceReportsScreen> {
   Future<void> getFirst() async {
     setState(() => _isLoadingFirst = true);
 
-    QuerySnapshot query = await PriceReportRepository.instance.getFirstAllProductPriceReports(widget.product.id, limit);
+    QuerySnapshot query = await PriceReportRepository.instance
+        .getFirstAllProductPriceReports(widget.product.id, limit);
 
-    if(query.docs.isNotEmpty) {
+    if (query.docs.isNotEmpty) {
       _lastDocument = query.docs.last;
-      priceReports.addAll(query.docs.map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot)).toList());
+      priceReports.addAll(
+        query.docs
+            .map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot))
+            .toList(),
+      );
       sortablePriceReports.addAll(priceReports);
 
       if (query.docs.length <= limit - 1) {
@@ -66,11 +71,20 @@ class _AllPriceReportsScreenState extends State<AllPriceReportsScreen> {
 
     setState(() => _isLoadingMore = true);
 
-    QuerySnapshot query = await PriceReportRepository.instance.getMoreAllProductPriceReports(widget.product.id, _lastDocument!, limit);
-    
+    QuerySnapshot query = await PriceReportRepository.instance
+        .getMoreAllProductPriceReports(
+          widget.product.id,
+          _lastDocument!,
+          limit,
+        );
+
     if (query.docs.isNotEmpty) {
       _lastDocument = query.docs.last;
-      priceReports.addAll(query.docs.map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot)).toList());
+      priceReports.addAll(
+        query.docs
+            .map((snapshot) => PriceReportModel.fromQuerySnapshot(snapshot))
+            .toList(),
+      );
       sortablePriceReports.addAll(priceReports);
     } else {
       _hasMoreData = false;
@@ -80,23 +94,30 @@ class _AllPriceReportsScreenState extends State<AllPriceReportsScreen> {
   }
 
   void _scrollListener() {
-    if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
       getMore();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    controller.assignPriceReports(sortablePriceReports, controller.selectedSortOption.value, priceReports);
+    controller.assignPriceReports(
+      sortablePriceReports,
+      controller.selectedSortOption.value,
+      priceReports,
+    );
 
     return Scaffold(
-      appBar: DefaultAppBar(title: Text('All Price Reports'), showBackArrow: true),
-      
+      appBar: DefaultAppBar(
+        title: Text('All Price Reports'),
+        showBackArrow: true,
+      ),
+
       body: SingleChildScrollView(
         controller: scrollController,
         child: Column(
           children: [
-
             /// -- Search
             Padding(
               padding: const EdgeInsets.only(top: Sizes.defaultSpace),
@@ -104,8 +125,10 @@ class _AllPriceReportsScreenState extends State<AllPriceReportsScreen> {
                 text: 'Search by store',
                 onTap: () {
                   showSearch(
-                    context: context, 
-                    delegate: PriceReportSearchDelegate(productId: widget.product.id)
+                    context: context,
+                    delegate: PriceReportSearchDelegate(
+                      productId: widget.product.id,
+                    ),
                   );
                 },
               ),
@@ -113,51 +136,73 @@ class _AllPriceReportsScreenState extends State<AllPriceReportsScreen> {
             const SizedBox(height: Sizes.spaceBtwSections / 4),
 
             Padding(
-                padding: EdgeInsets.all(Sizes.defaultSpace),
-                child: Column(
-                  children: [
-                    
-                    /// -- Dropdown Sorting Menu
-                    DropdownButtonFormField(
-                      decoration: const InputDecoration(prefixIcon: Icon(Iconsax.sort)),
-                      initialValue: controller.selectedSortOption.value,
-                      onChanged: (value) {
-                        controller.sortProducts(value!, priceReports);
-                      },
-                      items: ['Confirmations', 'Newest', 'Oldest', 'Lowest Price', 'Highest Price']
-                        .map(
-                          (option) =>
-                            DropdownMenuItem(value: option, child: Text(option)),
-                        )
-                        .toList(),
+              padding: EdgeInsets.all(Sizes.defaultSpace),
+              child: Column(
+                children: [
+                  /// -- Dropdown Sorting Menu
+                  DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.sort),
                     ),
-                    const SizedBox(height: Sizes.spaceBtwSections),
+                    initialValue: controller.selectedSortOption.value,
+                    onChanged: (value) {
+                      controller.sortProducts(value!, priceReports);
+                    },
+                    items:
+                        [
+                              'Confirmations',
+                              'Newest',
+                              'Oldest',
+                              'Lowest Price',
+                              'Highest Price',
+                            ]
+                            .map(
+                              (option) => DropdownMenuItem(
+                                value: option,
+                                child: Text(option),
+                              ),
+                            )
+                            .toList(),
+                  ),
+                  const SizedBox(height: Sizes.spaceBtwSections),
 
-                    /// -- Price Reports
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.priceReports.length + (_hasMoreData ? 1 : 0),
-                      itemBuilder: (_, index) {
-                        if (_isLoadingFirst) {
-                          return AllPriceReportsLoader(itemCount: limit);
-                        } else if (index == controller.priceReports.length) {
-                          return const PriceReportCardWideShimmer();
-                        }
-                                
-                        return Obx(
-                          () => PriceReportCardWide(
-                            priceReport: controller.priceReports[index],
-                            onTap: () => Get.to(() => PriceReportsDetailScreen(selectedPriceReport: controller.priceReports[index]))
-                          ),
-                        );
-                      }, 
-                      separatorBuilder: (_, index) => 
-                        const SizedBox(height: Sizes.spaceBtwItems)
-                    ),
-                  ],
-                )
+                  /// -- Price Reports
+                  _isLoadingFirst
+                      ? AllPriceReportsLoader(itemCount: limit)
+                      : priceReports.isEmpty
+                      ? Text(
+                          'No data found. Add price reports through the product screen.',
+                          textAlign: TextAlign.center,
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              controller.priceReports.length +
+                              (_hasMoreData ? 1 : 0),
+                          itemBuilder: (_, index) {
+                            if (index == controller.priceReports.length) {
+                              return const PriceReportCardWideShimmer();
+                            }
+
+                            return Obx(
+                              () => PriceReportCardWide(
+                                priceReport: controller.priceReports[index],
+                                onTap: () => Get.to(
+                                  () => PriceReportsDetailScreen(
+                                    selectedPriceReport:
+                                        controller.priceReports[index],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (_, index) =>
+                              const SizedBox(height: Sizes.spaceBtwItems),
+                        ),
+                ],
               ),
+            ),
           ],
         ),
       ),
@@ -166,10 +211,7 @@ class _AllPriceReportsScreenState extends State<AllPriceReportsScreen> {
 }
 
 class AllPriceReportsLoader extends StatelessWidget {
-  const AllPriceReportsLoader({
-    super.key,
-    required this.itemCount
-  });
+  const AllPriceReportsLoader({super.key, required this.itemCount});
 
   final int itemCount;
 
@@ -178,10 +220,9 @@ class AllPriceReportsLoader extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: itemCount,
-      itemBuilder: (_, index) =>
-        const PriceReportCardWideShimmer(),
-      separatorBuilder: (_, index) => 
-        const SizedBox(height: Sizes.spaceBtwItems),
-      );
+      itemBuilder: (_, index) => const PriceReportCardWideShimmer(),
+      separatorBuilder: (_, index) =>
+          const SizedBox(height: Sizes.spaceBtwItems),
+    );
   }
 }

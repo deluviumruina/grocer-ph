@@ -132,7 +132,7 @@ class PriceReportController extends GetxController {
         confirmationsList: []
       );
       await PriceReportRepository.instance.addPriceReport(priceReport);
-      await ProductRepository.instance.updateFromPriceReport(productId!);
+      await ProductRepository.instance.updateFromPriceReport(productId!, storeId!);
       await StoreRepository.instance.updateFromPriceReport(storeId!);
       await UserRepository.instance.updateFromPriceReport();
 

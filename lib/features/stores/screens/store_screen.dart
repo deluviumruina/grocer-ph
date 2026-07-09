@@ -5,10 +5,8 @@ import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/buttons/bottom_navigation_bar_button.dart';
 import 'package:grocer_ph/common/widgets/containers/bottom_navigation_bar.dart';
 import 'package:grocer_ph/features/products/screens/widgets/sortable_products.dart';
-import 'package:grocer_ph/features/stores/controllers/store_controller.dart';
 import 'package:grocer_ph/features/stores/models/store_model.dart';
 import 'package:grocer_ph/features/stores/screens/update_store_screen.dart';
-import 'package:grocer_ph/utils/helpers/cloud_helper_functions.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key, required this.store});
@@ -17,41 +15,28 @@ class StoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = StoreController.instance;
-
     return Scaffold(
       appBar: DefaultAppBar(title: Text(store.name), showBackArrow: true),
-      body: FutureBuilder(
-        future: controller.getStoreProductIds(store.id),
-        builder: (_, snapshot) {
-          final loader = const Center(child: CircularProgressIndicator());
-          final widget = CloudHelperFunctions.checkMultiRecordState(loader: loader, snapshot: snapshot);
-
-          if (widget != null) {
-            return widget;
-          } else {
-            final ids = snapshot.data!;
-
-            return SortableProducts(
-              queryFirst: FirebaseFirestore.instance
-                  .collection('Products')
-                  .where(FieldPath.documentId, whereIn: ids),
-              queryMore: FirebaseFirestore.instance
-                  .collection('Products')
-                  .where(FieldPath.documentId, whereIn: ids),
-            );
-          }
-        },
+      body: SortableProducts(
+        queryFirst: FirebaseFirestore.instance
+            .collection('Products')
+            .where('Stores', arrayContains: store.id)
+            .orderBy('LastUpdated', descending: true),
+        queryMore: FirebaseFirestore.instance
+            .collection('Products')
+            .where('Stores', arrayContains: store.id)
+            .orderBy('LastUpdated', descending: true),
       ),
       bottomNavigationBar: AppBottomNavigationBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             BottomNavigationBarButton(
-              buttonText: 'Update Store', onPressed: () => Get.to(() => UpdateStoreScreen(store: store))
+              buttonText: 'Update Store',
+              onPressed: () => Get.to(() => UpdateStoreScreen(store: store)),
             ),
           ],
-        )
+        ),
       ),
     );
   }

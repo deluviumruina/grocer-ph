@@ -160,6 +160,7 @@ class ProductController extends GetxController {
         image: downloadUrl.toString(),
         lastUpdated: DateTime.now(),
         priceReports: 0,
+        stores: []
       );
       await _productRepository.addProduct(product);
 

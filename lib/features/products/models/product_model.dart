@@ -10,6 +10,7 @@ class ProductModel {
   int priceReports;
   double? priceMinimum;
   double? priceMaximum;
+  List<dynamic>? stores;
 
   ProductModel({
     required this.id,
@@ -21,6 +22,7 @@ class ProductModel {
     required this.priceReports,
     this.priceMinimum,
     this.priceMaximum,
+    this.stores
   });
 
   /// -- Empty
@@ -37,7 +39,8 @@ class ProductModel {
       'LastUpdated': lastUpdated,
       'PriceReports': priceReports,
       'PriceMinimum': priceMinimum ?? 0.0,
-      'PriceMaximum': priceMaximum ?? 0.0
+      'PriceMaximum': priceMaximum ?? 0.0,
+      'Stores': stores
     };
   }
 
@@ -55,7 +58,8 @@ class ProductModel {
       lastUpdated: data['LastUpdated'].toDate(),
       priceReports: data['PriceReports'],
       priceMinimum: data['PriceMinimum'] ?? 0.00,
-      priceMaximum: data['PriceMaximum'] ?? 0.00
+      priceMaximum: data['PriceMaximum'] ?? 0.00,
+      stores: data['Stores']
     );
   }
 
@@ -70,7 +74,8 @@ class ProductModel {
       lastUpdated: data['LastUpdated'].toDate(),
       priceReports: data['PriceReports'],
       priceMinimum: data['PriceMinimum'] ?? 0.0,
-      priceMaximum: data['PriceMaximum'] ?? 0.0
+      priceMaximum: data['PriceMaximum'] ?? 0.0,
+      stores: data['Stores']
     );
   }
 
