@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grocer_ph/common/widgets/containers/rounded_container.dart';
 import 'package:grocer_ph/common/widgets/images/app_icons.dart';
 import 'package:grocer_ph/common/widgets/texts/product_price_text.dart';
 import 'package:grocer_ph/features/price_comparison/models/price_report_model.dart';
 import 'package:grocer_ph/features/price_comparison/screens/widgets/confirmation_button.dart';
+import 'package:grocer_ph/features/profiles/controllers/user_controller.dart';
+import 'package:grocer_ph/features/profiles/screens/profile_screen.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
 import 'package:grocer_ph/utils/formatters/formatters.dart';
 import 'package:grocer_ph/utils/helpers/helper_functions.dart';
+import 'package:grocer_ph/utils/loaders/shimmer.dart';
 import 'package:iconsax/iconsax.dart';
 
 class PriceReportCardDetail extends StatelessWidget {
@@ -59,22 +63,36 @@ class PriceReportCardDetail extends StatelessWidget {
               SizedBox(height: Sizes.sm / 2),
 
               /// -- UserName
-              Row(
-                children: [
-                  AppIcons(
-                    icon: Iconsax.user,
-                    size: 14
-                  ),
-                  SizedBox(width: Sizes.sm / 2),
-                  Text(
-                    priceReport.userName,
-                    style: TextStyle(
-                      fontSize: 14
+              FutureBuilder(
+                future: UserController.instance.getProfile(priceReport.userId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const ShimmerLoader(width: 150, height: 10);
+                  }
+
+                  final userProfile = snapshot.data!;
+                  
+                  return InkWell(
+                    onTap: () => Get.to(() => ProfileScreen(userProfile: userProfile)),
+                    child: Row(
+                      children: [
+                        AppIcons(
+                          icon: Iconsax.user,
+                          size: 14
+                        ),
+                        SizedBox(width: Sizes.sm / 2),
+                        Text(
+                          priceReport.userName,
+                          style: TextStyle(
+                            fontSize: 14
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  );
+                }
               ),
             ],
           ),

@@ -45,12 +45,24 @@ class UserController extends GetxController {
   }
   
   // # -------------- [GET] -------------- # 
+  /// -- Get LOGGED IN USER
   Future<void> getUserDetails() async {
     try {
       final user = await userRepository.getUserDetails();
       this.user(user);
     } catch (e) {
       user(UserModel.empty());
+    }
+  }
+
+  /// -- Get OTHER USER PROFILE
+  Future<UserModel> getProfile(String userId) async {
+    try {
+      final profile = await UserRepository.instance.getProfile(userId);
+      return profile;
+    } catch (e) {
+      AppSnackBars.errorSnackBar(title: 'Error.', message: e.toString());
+      return UserModel.empty();
     }
   }
 

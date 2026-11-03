@@ -13,12 +13,13 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leadingIcon,
     this.leadingOnPressed,
-    this.showBackArrow = false, 
+    this.showBackArrow = false,
+    this.whiteBackArrow = false,
     this.onBackArrowPressed,
   });
 
   final Widget? title;
-  final bool showBackArrow;
+  final bool showBackArrow, whiteBackArrow;
   final IconData? leadingIcon;
   final List<Widget>? actions;
   final VoidCallback? onBackArrowPressed;
@@ -33,7 +34,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         automaticallyImplyLeading: false,
         leading: showBackArrow 
-        ? IconButton(onPressed: onBackArrowPressed ?? () => Get.back(), icon: Icon(Iconsax.arrow_left, color: dark ? Colors.white : AppColors.dark)) 
+        ? IconButton(onPressed: onBackArrowPressed ?? () => Get.back(), icon: Icon(Iconsax.arrow_left, color: whiteBackArrow ? Colors.white : dark ? Colors.white : AppColors.dark)) 
         : leadingIcon != null ? IconButton(onPressed: leadingOnPressed, icon:Icon(leadingIcon)) : null,
       title: title,
       actions: actions,

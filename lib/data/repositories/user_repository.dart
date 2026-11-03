@@ -10,6 +10,7 @@ class UserRepository extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // # -------------- [GET] -------------- # 
+  /// -- Get LOGGED IN USER
   Future<UserModel> getUserDetails() async {
     try {
       final documentSnapshot = await _db.collection("Users").doc(AuthenticationRepository.instance.authUser?.uid).get();
@@ -19,6 +20,26 @@ class UserRepository extends GetxController {
         return UserModel.empty();
       }
 
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  /// -- Get OTHER USER PROFILE
+  Future<UserModel> getProfile(String userId) async {
+    try {
+      final snapshot = await _db.collection('Users').doc(userId).get();
+      return UserModel.fromSnapshot(snapshot);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  /// -- Get LEADERBOARD
+  Future<List<UserModel>> getLeaderboard() async {
+    try {
+      final query = await _db.collection('Users').orderBy('Reputation', descending: true).limit(10).get();
+      return query.docs.map((e) => UserModel.fromSnapshot(e)).toList();
     } catch (e) {
       throw e.toString();
     }

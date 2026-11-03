@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grocer_ph/common/widgets/containers/app_bar.dart';
 import 'package:grocer_ph/common/widgets/containers/large_header_container.dart';
 import 'package:grocer_ph/common/widgets/texts/clickable_section_heading.dart';
 import 'package:grocer_ph/features/profiles/controllers/user_controller.dart';
+import 'package:grocer_ph/features/profiles/screens/leaderboard_screen.dart';
 import 'package:grocer_ph/features/profiles/screens/widgets/profile_row.dart';
 import 'package:grocer_ph/utils/constants/colors.dart';
 import 'package:grocer_ph/utils/constants/sizes.dart';
@@ -99,6 +101,28 @@ class AccountScreen extends StatelessWidget {
                     value: controller.user.value.email,
                     showIcon: false,
                   ),
+
+                  const SizedBox(height: Sizes.spaceBtwSections),
+                  const Divider(),
+                  const SizedBox(height: Sizes.spaceBtwSections),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Get.to(() => LeaderboardScreen()), 
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.white,
+                        side: const BorderSide(
+                          color: AppColors.buttonPrimary
+                        )
+                      ),
+                      child: const Text(
+                        'Leaderboard',
+                        style: TextStyle(color: Colors.black),
+                      )
+                    ),
+                  ),
+
                   const SizedBox(height: Sizes.spaceBtwSections),
                   const Divider(),
                   const SizedBox(height: Sizes.spaceBtwSections),
