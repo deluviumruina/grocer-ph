@@ -1,7 +1,7 @@
 # GrocerPH
 ### A crowdsourced price comparison mobile app. Compatible with Android only.
 
-### <a href="https://github.com/deluviumruina/grocer-ph/releases/tag/v1.0.1">[DOWNLOAD HERE]</a>
+### <a href="https://github.com/deluviumruina/grocer-ph/releases/download/v1.0.1/GrocerPH.apk">[DOWNLOAD HERE]</a>
 
 Please accomplish the following [survey](https://forms.gle/JVMX2bXYjLtucF3C8) after testing the app.
 
